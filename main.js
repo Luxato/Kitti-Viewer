@@ -16,7 +16,8 @@ let addWindow;
 app.on('ready', () => {
     mainWindow = new BrowserWindow({
         width: 1200,
-        height: 800
+        height: 800,
+        frame: false
     });
     mainWindow.loadURL('file://C:\\wamp64\\www\\kittiviewer\\index.html'); // Pass the document you want to execute. Can be a real URL a local or html document.
     mainWindow.on('closed', () => app.quit());
