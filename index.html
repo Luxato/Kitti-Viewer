@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Lidar Data Viewer 11111</title>
+    <title>Lidar Data Viewer</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
     <script src="./js/jquery.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script>if (window.module) module = window.module;</script>
     <style>
         * {
@@ -272,7 +273,7 @@
         </div>
         <div class="col-12 col-md-9 padding-none">
             <main>
-                <div id="point-cloud">
+                <div id="myDiv">
                     Point cloud will be loaded here.
                 </div>
                 <hr>
@@ -349,4 +350,5 @@
         $('[data-toggle="tooltip"]').tooltip();
     });
 </script>
+<script src="./js/3d_plotly.js"></script>
 </html>
