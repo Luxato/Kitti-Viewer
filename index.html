@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lidar Data Viewer 11111</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <script src="./js/jquery.min.js"></script>
+    <script>if (window.module) module = window.module;</script>
+    <style>
+        * {
+            font-family: 'Roboto', sans-serif;
+        }
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+        h1  {
+            /*text-align: center;*/
+            font-size: 20px;
+            margin: 15px 0 5px 0;
+        }
+        header {
+            width: 100%;
+        }
+        #overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: black;
+            opacity: 0.25;
+            z-index: 99;
+        }
+
+        #loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 999;
+        }
+
+        .loaderText{
+            display: inline-block;
+            position: relative;
+            top: -20px;
+            font-size: 13px;
+            color: ghostwhite;
+            position: relative;
+            left: -50%;
+            top: -20px;
+            width: 100%;
+        }
+
+        @media (min-width: 1400px) {
+            .container {
+                max-width: 1660px;
+            }
+        }
+    </style>
+    <style>
+        .sk-cube-grid {
+            width: 40px;
+            height: 40px;
+            position: relative;
+            left: -20px;
+            top: -20px;
+        }
+
+        .sk-cube-grid .sk-cube {
+            width: 33%;
+            height: 33%;
+            background-color: #fff;
+            float: left;
+            -webkit-animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
+            animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
+        }
+        .sk-cube-grid .sk-cube1 {
+            -webkit-animation-delay: 0.2s;
+            animation-delay: 0.2s; }
+        .sk-cube-grid .sk-cube2 {
+            -webkit-animation-delay: 0.3s;
+            animation-delay: 0.3s; }
+        .sk-cube-grid .sk-cube3 {
+            -webkit-animation-delay: 0.4s;
+            animation-delay: 0.4s; }
+        .sk-cube-grid .sk-cube4 {
+            -webkit-animation-delay: 0.1s;
+            animation-delay: 0.1s; }
+        .sk-cube-grid .sk-cube5 {
+            -webkit-animation-delay: 0.2s;
+            animation-delay: 0.2s; }
+        .sk-cube-grid .sk-cube6 {
+            -webkit-animation-delay: 0.3s;
+            animation-delay: 0.3s; }
+        .sk-cube-grid .sk-cube7 {
+            -webkit-animation-delay: 0s;
+            animation-delay: 0s; }
+        .sk-cube-grid .sk-cube8 {
+            -webkit-animation-delay: 0.1s;
+            animation-delay: 0.1s; }
+        .sk-cube-grid .sk-cube9 {
+            -webkit-animation-delay: 0.2s;
+            animation-delay: 0.2s; }
+
+        @-webkit-keyframes sk-cubeGridScaleDelay {
+            0%, 70%, 100% {
+                -webkit-transform: scale3D(1, 1, 1);
+                transform: scale3D(1, 1, 1);
+            } 35% {
+                  -webkit-transform: scale3D(0, 0, 1);
+                  transform: scale3D(0, 0, 1);
+              }
+        }
+
+        @keyframes sk-cubeGridScaleDelay {
+            0%, 70%, 100% {
+                -webkit-transform: scale3D(1, 1, 1);
+                transform: scale3D(1, 1, 1);
+            } 35% {
+                  -webkit-transform: scale3D(0, 0, 1);
+                  transform: scale3D(0, 0, 1);
+              }
+        }
+    </style>
+    <style>
+        h2 {
+            color: #666668;
+            font-size: 17px;
+        }
+        body, html {
+            height: 100%;
+        }
+        body {
+            background: #1E1E20;
+        }
+        .full-page {
+            height: 100%;
+        }
+        .sidebar {
+            height: 100%;
+            background-color: #333333;
+            -webkit-box-shadow: 10px 0px 14px -6px rgba(0,0,0,0.5);
+            -moz-box-shadow: 10px 0px 14px -6px rgba(0,0,0,0.5);
+            box-shadow: 10px 0px 14px -6px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+        .list-group-item {
+            border-radius: 0 !important;
+        }
+        .list-group-item {
+            background-color: #333333;
+            color: white;
+        }
+        .list-group-item:hover {
+            border-left: 3px solid #F3F75A;
+            color: #fff;
+        }
+        #point-cloud {
+            background: #000;
+        }
+        .padding-none {
+            padding: 0 !important;
+        }
+        main {
+            padding: 20px;
+        }
+        /*hr {*/
+            /*background-color: #1E1E20;*/
+        /*}*/
+        .ui-control {
+            margin: 10px 0;
+            width: 100%;
+        }
+        .ui-control label, .ui-control input {
+            cursor: pointer;
+        }
+        .ui-control button, .ui-control select {
+            width: 200px;
+            margin: 0 auto;
+            display: block;
+            height: 31px;
+            cursor: pointer;
+        }
+        .ui-control select {
+            cursor: pointer;
+            text-align: center;
+            border-radius: 0;
+        }
+        .ui-control select:hover{
+            color: #fff;
+        }
+        .btn {
+            background: #444;
+            color: #818180;
+        }
+        .btn:hover {
+            color: #fff;
+        }
+        .custom-select {
+            background: #444;
+            color: #818180;
+            border: none;
+        }
+        .auto {
+            margin: 0 auto;
+        }
+        .questionmark {
+            float: right;
+            position: relative;
+            top: -27px;
+            left: -23px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div id="overlay"></div>
+<div id="loader">
+    <div class="sk-cube-grid">
+        <div class="sk-cube sk-cube1"></div>
+        <div class="sk-cube sk-cube2"></div>
+        <div class="sk-cube sk-cube3"></div>
+        <div class="sk-cube sk-cube4"></div>
+        <div class="sk-cube sk-cube5"></div>
+        <div class="sk-cube sk-cube6"></div>
+        <div class="sk-cube sk-cube7"></div>
+        <div class="sk-cube sk-cube8"></div>
+        <div class="sk-cube sk-cube9"></div>
+    </div>
+    <div class="loaderText">Loading...</div>
+</div>
+<div class="container-fluid full-page">
+    <div class="row full-page">
+        <div class="col-6 col-md-3 sidebar-offcanvas padding-none sidebar" id="sidebar">
+            <div class="list-group">
+                <a href="#" class="list-group-item"><i class="far fa-file"></i> Link</a>
+                <a href="#" class="list-group-item"><i class="far fa-file"></i> Link</a>
+                <a href="#" class="list-group-item"><i class="far fa-file"></i> Link</a>
+                <a href="#" class="list-group-item"><i class="far fa-file"></i> Link</a>
+                <a href="#" class="list-group-item"><i class="far fa-file"></i> Link</a>
+                <a href="#" class="list-group-item"><i class="far fa-file"></i> Link</a>
+            </div>
+            <hr>
+            <div class="ui-control">
+                <select class="custom-select auto" style="position: relative;left: -8px;">
+                    <option selected>Open this select menu</option>
+                    <option value="1">Every point</option>
+                    <option value="2">Every second point</option>
+                    <option value="3" selected>Every third point</option>
+                </select>
+                <div class="questionmark" data-toggle="tooltip" data-placement="right" title="Tooltip on top"><i style="color:white;" class="far fa-question-circle"></i></div>
+            </div>
+
+            <div class="ui-control">
+                <button class="btn btn-sm auto" style="border-radius:0;">
+                    <div class="form-check has-warning">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" id="checkboxWarning" value="option1" checked>
+                            Only X > 0
+                        </label>
+                    </div>
+                </button>
+                <div class="questionmark" data-toggle="tooltip" data-placement="right" title="Tooltip on top"><i style="color:white;" class="far fa-question-circle"></i></div>
+            </div>
+
+            <div class="ui-control">
+                <button class="btn btn-sm auto" style="border-radius:0;">Flush cache</button>
+                <div class="questionmark" data-toggle="tooltip" data-placement="right" title="Tooltip on top"><i style="color:white;" class="far fa-question-circle"></i></div>
+            </div>
+        </div>
+        <div class="col-12 col-md-9 padding-none">
+            <main>
+                <div id="point-cloud">
+                    Point cloud will be loaded here.
+                </div>
+                <hr>
+                <div id="frames-container">
+                    <h2>Frames</h2>
+                    <div id="frames">
+                        <img width="200px" src="" alt="">
+                    </div>
+                </div>
+                <hr>
+            </main>
+        </div>
+    </div>
+</div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script>
+    const electron = require('electron');
+    const {ipcRenderer} = electron;
+
+    //const {message} = 'testing message';
+    var message = ['test'];
+    console.log('vypisujem spravu');
+    console.log(message);
+
+    ipcRenderer.send('video:submit', message); // second variable has to be an array because it will be converted to JSON.
+
+    /* *************************** EVENT HANDLERS *************************** */
+    ipcRenderer.on('video:metadata', (event, duration) => {
+        console.log('This is the response from handler');
+        console.log(duration);
+    });
+
+    ipcRenderer.on('loader:show', (event, status) => {
+        loader(status, 'Generating scene');
+    });
+
+    ipcRenderer.on('content:show', (event, pictures) => {
+        // TODO add pictures.
+        console.log(pictures);
+        $('#content').append('<img src="'+ pictures.Output1 + '">');
+        $('#content').append('<img src="'+ pictures.Output2 + '">');
+        $('#content').append('<img src="'+ pictures.Output3 + '">');
+    });
+
+    function loader(status, text) {
+
+        if (text == undefined || text == '') {
+            $('.loaderText').text('Loading...');
+        } else {
+            $('.loaderText').text(text);
+        }
+
+        if (status == 1) {
+            $(function () {
+                $('#overlay').fadeIn();
+                $('#loader').fadeIn();
+            });
+        } else {
+            $(function () {
+                $('#overlay').fadeOut();
+                $('#loader').fadeOut();
+            });
+        }
+    }
+</script>
+<script>
+    $(function () {
+        $('#overlay').fadeOut();
+        $('#loader').fadeOut();
+    });
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+</html>
