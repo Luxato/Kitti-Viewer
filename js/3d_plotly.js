@@ -1,3 +1,5 @@
+var plot;
+
 /* JAVASCRIPT CODE GOES HERE */
 Plotly.d3.csv('./kitti/kitti.csv', function(err, rows){
     function unpack(rows, key) {
@@ -16,8 +18,8 @@ Plotly.d3.csv('./kitti/kitti.csv', function(err, rows){
         }}];
     var layout = {
         autosize: true,
-        height: 650,
-        width:850,
+        height: 400,
+        width:835,
         scene: {
             aspectratio: {
                 x: 1,
@@ -53,10 +55,19 @@ Plotly.d3.csv('./kitti/kitti.csv', function(err, rows){
                 type: 'linear',
                 zeroline: false
             }
-        },
-        title: '3d point clustering',
+        }
     };
 
-    Plotly.newPlot('myDiv', data, layout);
+   plot = Plotly.newPlot('myDiv', data, layout).then(heightHandler);
+
 
 });
+
+function heightHandler() {
+    $('.sidebar').css('height', $(document).height());
+}
+
+//var myPlot = document.getElementById('myDiv');
+// plot.on('plotly_afterplot', function(){
+//     $('.sidebar').css('height', $(document).height());
+// });
