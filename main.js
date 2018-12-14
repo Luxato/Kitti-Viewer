@@ -19,6 +19,8 @@ app.on('ready', () => {
         height: 800,
         frame: false
     });
+    mainWindow.maximize();
+
     mainWindow.loadURL('file://C:\\wamp64\\www\\kittiviewer\\index.html'); // Pass the document you want to execute. Can be a real URL a local or html document.
     mainWindow.on('closed', () => app.quit());
 

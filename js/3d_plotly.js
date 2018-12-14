@@ -18,7 +18,7 @@ Plotly.d3.csv('./kitti/kitti.csv', function(err, rows){
         }}];
     var layout = {
         autosize: true,
-        height: 400,
+        height: 500,
         width:835,
         scene: {
             aspectratio: {

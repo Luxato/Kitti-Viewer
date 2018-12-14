@@ -208,9 +208,12 @@
             padding: 0 20px 20px 20px;
         }
 
-        /*hr {*/
-        /*background-color: #1E1E20;*/
-        /*}*/
+        #frames {
+            display: block;
+            width: 1080px;
+            margin: 0 auto;
+        }
+
         .ui-control {
             margin: 10px 0;
             width: 100%;
@@ -310,32 +313,50 @@
             background: #000;
             padding: 20px;
         }
+        .inline-block {
+            display: inline-block;
+        }
+        .select_box{
+            position: relative;
+            padding: 10px 0;
+        }
+        .select_box:after{
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 6px solid #fff;
+            position: absolute;
+            top: 24px;
+            right: 68px;
+            content: "";
+            z-index: 98;
+        }
     </style>
 </head>
 <body>
-<div class="title-bar">
+<div class="title-bar" style="background-color: #2C2C2C">
     <div class="menu-button-container">
-        <button
-                id="menu-button"
-                class="menu-button"
-        />
+        <!--<strong>Lidar Kitti Viewer</strong>-->
     </div>
     <div class="app-name-container">
-        <p>App Name</p>
+        <a style="color: #fff;" target="_blank" href="https://github.com/Luxato/Kitti-Viewer"><strong><img src="./logo.png" alt=""> Lidar Kitti Viewer</strong></a>
     </div>
     <div class="window-controls-container">
-        <button
-                id="minimize-button"
-                class="minimize-button"
-        />
-        <button
-                id="min-max-button"
-                class="min-max-button"
-        />
+        <!--<button-->
+                <!--id="minimize-button"-->
+                <!--class="minimize-button"-->
+        <!--&gt;</button>-->
+        <!--<button-->
+                <!--id="min-max-button"-->
+                <!--class="min-max-button"-->
+        <!--&gt;</button>-->
         <button
                 id="close-button"
                 class="close-button"
-        />
+        >
+            <i class="fas fa-times"></i>
+        </button>
     </div>
 </div>
 <div id="overlay"></div>
@@ -357,16 +378,16 @@
     <div class="row full-page">
         <div class="col-6 col-md-3 sidebar-offcanvas padding-none sidebar" id="sidebar">
             <div class="list-group">
-                <a href="#" class="list-group-item"><i class="far fa-file"></i> 2011_09_26/ <span class="sizeofdir">(1929)</span></a>
-                <a href="#" class="list-group-item"><i class="far fa-file"></i> Link</a>
-                <a href="#" class="list-group-item"><i class="far fa-file"></i> Link</a>
-                <a href="#" class="list-group-item"><i class="far fa-file"></i> Link</a>
-                <a href="#" class="list-group-item"><i class="far fa-file"></i> Link</a>
-                <a href="#" class="list-group-item"><i class="far fa-file"></i> Link</a>
+                <a href="#" class="list-group-item"><i class="far fa-file"></i> 2011_09_26/ <span class="sizeofdir">(128)</span></a>
+                <a href="#" class="list-group-item"><i class="far fa-file"></i> 2011_09_27/ <span class="sizeofdir">(135)</span></a>
+                <a href="#" class="list-group-item"><i class="far fa-file"></i> 2011_09_28/ <span class="sizeofdir">(98)</span></a>
+                <a href="#" class="list-group-item"><i class="far fa-file"></i> 2011_09_29/ <span class="sizeofdir">(203)</span></a>
+                <a href="#" class="list-group-item"><i class="far fa-file"></i> 2011_09_30/ <span class="sizeofdir">(145)</span></a>
+                <a href="#" class="list-group-item"><i class="far fa-file"></i> 2011_10_01/ <span class="sizeofdir">(107)</span></a>
             </div>
             <hr>
-            <div class="ui-control">
-                <select class="custom-select auto" style="position: relative;left: -8px;">
+            <div class="ui-control select_box">
+                <select class="custom-select auto" style="position: relative; left: -8px;">
                     <option selected>Open this select menu</option>
                     <option value="1">Every point</option>
                     <option value="2">Every second point</option>
@@ -390,52 +411,67 @@
                         style="color:white;" class="far fa-question-circle"></i></div>
             </div>
 
-            <div class="ui-control">
-                <button class="btn btn-sm auto" style="border-radius:0;">Flush cache</button>
-                <div class="questionmark" data-toggle="tooltip" data-placement="right" title="Tooltip on top"><i
-                        style="color:white;" class="far fa-question-circle"></i></div>
-            </div>
+            <!--<div class="ui-control">-->
+                <!--<button class="btn btn-sm auto" style="border-radius:0;">Flush cache</button>-->
+                <!--<div class="questionmark" data-toggle="tooltip" data-placement="right" title="Tooltip on top"><i-->
+                        <!--style="color:white;" class="far fa-question-circle"></i></div>-->
+            <!--</div>-->
         </div>
         <div class="col-12 col-md-9 padding-none">
             <main>
                 <div id="myDiv">
                 </div>
                 <hr>
-                <div id="frames-container">
+                <div id="frames-container" class="inline-block">
+                    <h2>Selected frame</h2>
+                    <div id="current-frame" style="width: 100%; margin-bottom: 10px;">
+                        <i class="fas fa-caret-left" style="color: #fff;display: inline-block;float: left;font-size: 75px;margin: 10px;position: relative;top: 125px;cursor: pointer;"></i>
+                        <img style="margin: 0 auto; display: inline-block; max-width: 1185px;" src="./kitti/0000000000.png" alt="">
+                        <i class="fas fa-caret-right" style="color: #fff;display: inline-block;float: right;font-size: 75px;margin: 10px;position: relative;top: 125px;cursor: pointer;"></i>
+                        <div class="frame-name" style="text-align:center; color: #fff;">./kitti/0000000000.png</div>
+                    </div>
+
                     <h2>Frames</h2>
                     <div id="frames">
                         <div class="frame">
                             <img width="250px" src="./kitti/0000000000.png" alt="">
+                            <div class="frame-name" style="text-align:center; color: #fff;">./kitti/0000000001.png</div>
                         </div>
                         <div class="frame">
                             <img width="250px" src="./kitti/0000000000.png" alt="">
+                            <div class="frame-name" style="text-align:center; color: #fff;">./kitti/0000000002.png</div>
                         </div>
                         <div class="frame">
                             <img width="250px" src="./kitti/0000000000.png" alt="">
+                            <div class="frame-name" style="text-align:center; color: #fff;">./kitti/0000000003.png</div>
                         </div>
                         <div class="frame">
                             <img width="250px" src="./kitti/0000000000.png" alt="">
+                            <div class="frame-name" style="text-align:center; color: #fff;">./kitti/0000000000.png</div>
                         </div>
                         <div class="frame">
                             <img width="250px" src="./kitti/0000000000.png" alt="">
+                            <div class="frame-name" style="text-align:center; color: #fff;">./kitti/0000000000.png</div>
                         </div>
                         <div class="frame">
                             <img width="250px" src="./kitti/0000000000.png" alt="">
+                            <div class="frame-name" style="text-align:center; color: #fff;">./kitti/0000000000.png</div>
                         </div>
                         <div class="frame">
                             <img width="250px" src="./kitti/0000000000.png" alt="">
+                            <div class="frame-name" style="text-align:center; color: #fff;">./kitti/0000000000.png</div>
                         </div>
                         <div class="frame">
                             <img width="250px" src="./kitti/0000000000.png" alt="">
+                            <div class="frame-name" style="text-align:center; color: #fff;">./kitti/0000000000.png</div>
                         </div>
                         <div class="frame">
                             <img width="250px" src="./kitti/0000000000.png" alt="">
+                            <div class="frame-name" style="text-align:center; color: #fff;">./kitti/0000000000.png</div>
                         </div>
                         <div class="frame">
                             <img width="250px" src="./kitti/0000000000.png" alt="">
-                        </div>
-                        <div class="frame">
-                            <img width="250px" src="./kitti/0000000000.png" alt="">
+                            <div class="frame-name" style="text-align:center; color: #fff;">./kitti/0000000000.png</div>
                         </div>
                         <div class="frame">
                             <img width="250px" src="./kitti/0000000000.png" alt="">
